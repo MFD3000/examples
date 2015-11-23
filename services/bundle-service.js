@@ -6,7 +6,7 @@ angular.module('NPC').factory('BundleService',function() {
   
 /*jshint multistr: true */
 
-
+//START --Helper Functions
 function escapeRegExp(str) {
     return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
@@ -14,8 +14,10 @@ function escapeRegExp(str) {
 function replaceAll(str, find, replace) {
   return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
+//END --Helper Functions
 
 
+//START --Data Scrubber
 var createChoiceObjFromRawData = function(rawData){
 
 
@@ -47,18 +49,14 @@ var createChoiceObjFromRawData = function(rawData){
 
         return app.value;
       }).value();
-
-
     return {goal:goal, menu: newList};
-
-
-  
-
 };
-
+//END --Data Scrubber
+//START -- Combo Generation Wrapper
 function generateCombinations(rawData){
   var attemptCounter = 0;
 
+  //START Recursive combo builder
   var buildCombos = function buildCombos(total, menu, appetizers, optionsGroups) {
     total = _.cloneDeep(total);
     menu = _.cloneDeep(menu);
@@ -68,7 +66,7 @@ function generateCombinations(rawData){
     var newOptionsGroups = [];
     
     attemptCounter = attemptCounter + 1;
-
+    
 
     _.each(appetizers, function(app, index){
       var goodTotal = 0;
@@ -108,10 +106,10 @@ function generateCombinations(rawData){
        
     });
   
-  return newOptionsGroups;
+    return newOptionsGroups;
     
   };
-
+  //END Recursive combo builder
 
 
   var choiceObj = createChoiceObjFromRawData(rawData);
@@ -128,7 +126,7 @@ function generateCombinations(rawData){
   }
 
 }
-
+//END -- Combo Generation Wrapper
     
 	return {
     generateCombinations:generateCombinations
