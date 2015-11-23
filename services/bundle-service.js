@@ -71,28 +71,29 @@ function generateCombinations(rawData){
 
 
     _.each(appetizers, function(app, index){
-    
-      
-       if( total - app.value === 0){
+      var goodTotal = 0;
+      _.each(menu, function(app){
+        goodTotal = goodTotal + app.value;
+        
+      });
+  
+       if( total - (goodTotal + app.value) === 0){
           menu.push(app);
-          var goodTotal = 0;
-          _.each(menu, function(app){
-            goodTotal = goodTotal + app.value;
-            
-          });
+          
+          
           
           newOptionsGroups.push(menu);
           
-          return optionsGroups;
+            return optionsGroups;
 
         }
 
-        if(total - app.value > 0){
+        if(total - goodTotal > 0){
           var newTotal = total - app.value;
           
           menu.push(app);
           
-          var groups =  buildCombos(newTotal, menu , appetizers2, optionsGroups);
+          var groups =  buildCombos(total, menu , appetizers2, optionsGroups);
        
           if(!_.isEmpty(groups)){
             newOptionsGroups = newOptionsGroups.concat(groups);

@@ -4,7 +4,7 @@ angular.module('admin').config(function($stateProvider) {
 
     
     $stateProvider.state('bundle-builder', {
-        url: '/admin/bundles',
+        url: '/admin',
         templateUrl: 'admin/partial/bundle-builder/bundle-builder.html'
     });
     /* Add New States Above */

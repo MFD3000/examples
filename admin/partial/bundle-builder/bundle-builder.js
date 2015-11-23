@@ -2,16 +2,26 @@ angular.module('admin').controller('BundleBuilderCtrl',function($scope, BundleSe
 
 
 $scope.list = [];
-$scope.combinations = [];
-      $scope.text = 'hello';
-      $scope.submit = function() {
-        if ($scope.comboData) {
-          
-          console.log($scope.comboData);
+$scope.getTotal = function(menu){
+  var total = 0;
+  _.each(menu, function(item){
+    total = total + item.value;
 
-          $scope.combinations = BundleService.generateCombinations($scope.comboData);
-          console.log($scope.combinations);
-        }
-      };
+  });
+  return total;
+};
+
+  $scope.combinations = [];
+    $scope.text = 'hello';
+    $scope.submit = function() {
+      if ($scope.comboData) {
+        
+        console.log($scope.comboData);
+
+        $scope.combinations = BundleService.generateCombinations($scope.comboData);
+        console.log($scope.combinations);
+
+      }
+    };
 
 });
