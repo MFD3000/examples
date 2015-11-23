@@ -1,0 +1,16 @@
+<div class="col-md-12" ng-controller="BundleBuilderCtrl">
+
+
+<form ng-submit="submit()">
+  <div class="form-group">
+    <label for="comboData">Please Enter Goal Price and Menu Data Here: </label>
+    <textarea class="form-control" rows="3" ng-model="comboData" name="comboData"></textarea>
+  </div>
+  
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<div ng-repeat="menu in combinations">
+  <div>Choice #{{$index}} 
+  <div ng-repeat="item in menu">{{item.name}}</div>
+</div>
+</div>
