@@ -1,10 +1,10 @@
-describe('bundleService', function() {
+describe('BundleService', function() {
 
   beforeEach(module('NPC'));
 
-  it('should ...', inject(function(bundleService) {
+  it('should ...', inject(function(BundleService) {
 
-	//expect(bundleService.doSomething()).toEqual('something');
+
 
   }));
 

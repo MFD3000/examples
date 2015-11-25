@@ -12,14 +12,25 @@ $scope.getTotal = function(menu){
 };
 
   $scope.combinations = [];
-    $scope.text = 'hello';
+    
     $scope.submit = function() {
       if ($scope.comboData) {
         
-        console.log($scope.comboData);
+        
+        var processedCombos = BundleService.transformInput($scope.comboData);
+        if(!_.isNull(processedCombos)){
+          $scope.combinations = BundleService.generateCombinations(processedCombos);  
+          if(_.isEmpty($scope.combinations)){
+            //handle no combos found on ui
+            console.log("no combos");
+          }
+        }else{
+          //handle bad string error on ui
+          console.log("bad input");
+        }
+        
 
-        $scope.combinations = BundleService.generateCombinations($scope.comboData);
-        console.log($scope.combinations);
+        
 
       }
     };

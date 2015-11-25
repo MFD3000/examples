@@ -1,8 +1,5 @@
 angular.module('NPC').factory('BundleService',function() {
 
-
-
-  
   
 /*jshint multistr: true */
 
@@ -18,42 +15,56 @@ function replaceAll(str, find, replace) {
 
 
 //START --Data Scrubber
-var createChoiceObjFromRawData = function(rawData){
+var transformInput = function(rawData){
+  if(!_.isString(rawData)){
+    return null;
+  }
 
-
+  try{
   var scrubbedData = replaceAll(rawData, '$', ' ');
-  //console.log(scrubbedData); 
-   
+  
   var newList = scrubbedData.split('\n');
-
+  if(newList.length===1){
+    return null;
+  }
   var goal = parseFloat(newList[0].trim())* 100;
-  
-  
+  if(_.isNaN(goal)){
+    return null;
+  }
+    newList.splice(0, 1);
+    newList = _.chain(newList)
+    .map(function(item){
 
-  newList.splice(0, 1);
-  newList = _.chain(newList)
-      .map(function(item){
+      var newItem = item.split(',');
+      if(newItem.length===1){
+        return null;
+      }
+      var name = newItem[0];
+      var value = parseFloat(newItem[1].trim()) * 100;
+      // console.log(name);
+      // console.log(value);
+      return {
+        name: name,
+        value: value
+      };
+    })
+    .unique()
+    .sortBy(function(app){
 
-        var newItem = item.split(',');
-        var name = newItem[0];
-        var value = parseFloat(newItem[1].trim()) * 100;
-        // console.log(name);
-        // console.log(value);
-        return {
-          name: name,
-          value: value
-        };
-      })
-      .unique()
-      .sortBy(function(app){
-
-        return app.value;
-      }).value();
+      return app.value;
+    }).value();
+    
     return {goal:goal, menu: newList};
+  }
+  catch (e) {
+     // statements to handle any exceptions
+     console.log(e);
+     return null;
+  }
 };
 //END --Data Scrubber
 //START -- Combo Generation Wrapper
-function generateCombinations(rawData){
+function generateCombinations(processedData){
   var attemptCounter = 0;
 
   //START Recursive combo builder
@@ -112,11 +123,16 @@ function generateCombinations(rawData){
   //END Recursive combo builder
 
 
-  var choiceObj = createChoiceObjFromRawData(rawData);
+  
+  
+
   try {
+    if(!_.isObject(processedData)){
+      return [];
+    }
      var optionsGroups = [];
      
-    return buildCombos(choiceObj.goal, [], choiceObj.menu, optionsGroups);
+    return buildCombos(processedData.goal, [], processedData.menu, optionsGroups);
      
   }
   catch (e) {
@@ -129,6 +145,7 @@ function generateCombinations(rawData){
 //END -- Combo Generation Wrapper
     
 	return {
-    generateCombinations:generateCombinations
+    generateCombinations:generateCombinations,
+    transformInput:transformInput
   };
 });
